@@ -7,7 +7,7 @@ published: true
 
 **Problem Statement:** On Shopify, we have exactly 100 sneaker shops, and each of these shops sells only one model of shoe. We want to do some analysis of the average order value (AOV). When we look at orders data over a 30 day window, we naively calculate an AOV of $3145.13. Given that we know these shops are selling sneakers, a relatively affordable item, something seems wrong with our analysis. 
 
-**What we know about this dataset:**
+**Data exploration**
 - There are 100 sneaker stores in this data
 - each of these shops only sells one kind of sneaker
 - average order value (AOV) is $3145.13
@@ -76,7 +76,7 @@ data.isnull().sum()
 
 - **There are no missing values in this dataset.**
 
-## a. what could be going wrong with our calculation and a better way to evaluate this data
+## a. Think about what could be going wrong with our calculation. Think about a better way to evaluate this data. 
 
 **Investigating the Flaw of Averages**
 
@@ -263,13 +263,6 @@ fig.update_layout(
 fig.show()
 ```
 
-
-
-{% raw %}
-<iframe width="900" height="500" frameborder="0" scrolling="no" src="//plotly.com/~hananather/50.embed"></iframe>
-{% endraw %}
-
-
 **Okay.. but what do the above plot exactly indicate?**
 In the above figure, the first plot indicates the proportion of total order amount when we group by the ```total_items```. So we can see that the orders from store id: 42 where 2000 total shoes were purchased, account for 76.1% ($11,968,000) of the total order amount in our dataset.  
 
@@ -319,61 +312,10 @@ There are two main problems which skew the distribution of ```order_amount```:
 
 ## c. What is its value?
 
-**Calculating the Improved Metrics**
-
-
-```python
-def metrics_calculator(df):
-    """
-    A simple function  calculates the AOV, Standard Deviation of AOV and Median Order Value
-
-    Parameters
-    ----------
-    Pandas Dataframe with column 'total_items' and 'order_amount'
-    
-    Returns
-    -------
-    Pandas DataFrame
-    """
-    
-    #calculate the AOV
-    groupbyTotalItems = df.groupby('total_items')['order_amount'].mean().rename_axis('Total Items in Order').reset_index(name='AOV')
-    
-    # next we calculate the SD for AOV
-    SD = df.groupby('total_items')['order_amount'].std().rename_axis('Total Items in Order').reset_index(name='std')['std']
-    
-    # calculate the Median Order Value
-    median =  df.groupby('total_items')['order_amount'].median().rename_axis('Total Items in Order').reset_index(name='Median')['Median']
-    
-    #adding the SD and Median Order Value column to the dataframe
-    groupbyTotalItems['Median Order Value'] = median
-    groupbyTotalItems['Standard Deviation'] = SD
-    
-    return groupbyTotalItems
-```
-
-
-```python
-metrics_calculator(data)
-```
-
-![4.png]({{site.baseurl}}/images/data-challenge/4.png)
-
-
-- There is only one order in the dataset where 8 items were ordered, which explains the NaN Standard deviation. 
-- all orders where 2000 items were ordered were valued at 704,000 which explains the 0 Standard Deviation
-
-## Conclusion 
-
-Grouping the orders based on total items in order seems to give us more reasonable AOVs. However, the standard deviation is still relatively high. There is massive variation in order amounts, even when controlled for total items in the order. 
-
-The *Median Order Value (MOV)* gives us additional information about the distribution of ```order_amounts```. The MOV tells us that 50% of the orders amounts were above the median, and 50% were below. However, the median can be a tricky metric when viewed in isolation. **An increase in the median order value does not indicate whether or not sales went overall**. Median is just the middle value of a set of numbers. Rather than tunnel visioning on a single metric, viewing at the AOV, MOV, and the SD in combination leads to a richer understanding of the distribution of ```order_amounts```. The gap between the MOV and AOV gives a rough estimate of the skew in the data distribution. Additionally, the SD gives information about how much the order values vary.
-Ultimately, the improved understanding of data allows Merchants and the Shopify Team to make more informed decisions.
-
+The median order value is **$284.0**.
 
 # Question 2
 ### a. How many orders were shipped by Speedy Express in total?
-
 
 ```sql
 SELECT COUNT(*) FROM Orders 
@@ -382,7 +324,7 @@ ON Orders.ShipperID = Shippers.ShipperID
 WHERE ShipperName == "Speedy Express"
 ```
 
-**There were 54 orders shipped by Speedy Express in total.**
+There were **54** orders shipped by Speedy Express in total.
 
 
 ### b. What is the last name of the employee with the most orders?
@@ -395,11 +337,10 @@ GROUP BY Orders.EmployeeID
 ORDER BY COUNT(*) DESC
 ```
 
-**The last name of the employee with the most orders is "Peacock.**
+The last name of the employee with the most orders is **Peacock**.
 
 
 ### c. What product was ordered most by customers in Germany?
-
 
 The question is a little ambiguous. If it is asking for the product that was most frequently ordered, it would be **Gorgonzola Telino** (Ordered 5 times).
 
@@ -417,9 +358,9 @@ If it is asking for the product with the largest quantity purchased by customers
 
 ```sql
 SELECT ProductName, SUM(Quantity) FROM OrderDetails
-JOIN Products ON OrderDetails.ProductID = Products.ProductID
-JOIN Orders ON OrderDetails.OrderID = Orders.OrderID
-JOIN Customers ON Orders.CustomerID = Customers.CustomerID
+INNER JOIN Products ON OrderDetails.ProductID = Products.ProductID
+INNER JOIN Orders ON OrderDetails.OrderID = Orders.OrderID
+INNER JOIN Customers ON Orders.CustomerID = Customers.CustomerID
 WHERE Country == "Germany"
 GROUP BY ProductName
 ORDER BY SUM(Quantity) DESC
