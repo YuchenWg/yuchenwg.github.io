@@ -7,4 +7,4 @@ Following my passion for Data Science and programming, I am currently a data sci
 
 Technical skills: Python, R, PyTorch, SQL, SAS, JAVA, C/C++, HTML
 
-Employee directory profile: https://www.luxaerobot.com/about-us/
+[Employee directory profile](https://www.luxaerobot.com/about-us/)
