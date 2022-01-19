@@ -16,7 +16,7 @@ shopifydf = pd.read_csv("shopifyChal.csv")   # CSV renamed for convenience
 shopifydf.head()
 ```
 
-![1.png](https://github.com/YuchenWg/yuchenwg.github.io/blob/master/images/ShopifyChallenge/1.png)
+![1.png](https://github.com/YuchenWg/yuchenwg.github.io/raw/master/images/ShopifyChallenge/1.png)
 
 
 Check for missing values:
