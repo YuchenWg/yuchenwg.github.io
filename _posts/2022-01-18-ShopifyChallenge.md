@@ -16,7 +16,7 @@ shopifydf = pd.read_csv("shopifyChal.csv")   # CSV renamed for convenience
 shopifydf.head()
 ```
 
-data-challenge
+data exploration
 ![1.png]({{site.baseurl}}/images/ShopifyChallenge/1.png)
 
 
