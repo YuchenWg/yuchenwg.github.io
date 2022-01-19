@@ -77,16 +77,11 @@ shopifydf[shopifydf["order_amount"] > 2000]["shop_id"].value_counts()
     42    17
     Name: shop_id, dtype: int64
     
-So in this case, the outliers come from shop 42 and shop 78, corresponding from orders of 2000, which are most likely wholesale orders. 
-
-Depending on what we are interested in, a better way to evaluate the dataset could be to look at the **mean product cost**: since one shop sells only one shoe, we take the 
-order_amount divided by total_items and then find the mean. 
-
-Alternatively if we are more interested in how much customers spend per order on averge we can look at the **median order value**.
+So in this case, the outliers come from shop 42 and shop 78. For shop 42, the outliers come from order_amounts of $704000, corresponding from orders of 2000, which are most likely wholesale orders. Shop 78 seems to be selling expensive sneakers in general, with every sneaker selling for $25725.
 
 ## b. What metric would you report for this dataset?
 
-This really depends on what insights we wish to extract from the dataset. If this is for market research and we want to know how much shoes cost on average, then I would report the **mean product cost**. If we want to know how much customers spend on averge per order, I would report the **median order value** instead of the mean order value as it less prone to be skewed by outliers.
+This really depends on what insights we wish to extract from the dataset. If this is for market research and we want to know how much shoes cost on average, then I would report the **mean product cost** (since one shop sells only one shoe, we take the order_amount divided by total_items and then find the mean). If we want to know how much customers spend on averge per order, I would report the **median order value** instead of the mean order value as it less prone to be skewed by outliers.
 
 ## c. What is its value?
 
