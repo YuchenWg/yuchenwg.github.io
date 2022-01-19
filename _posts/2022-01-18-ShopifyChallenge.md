@@ -17,7 +17,7 @@ shopifydf.head()
 ```
 
 data-challenge
-![1.png]({{site.baseurl}}/images/data-challenge/1.png)
+![1.png]({{site.baseurl}}/images/ShopifyChallenge/1.png)
 
 
 Check for missing values:
@@ -48,15 +48,39 @@ shopifydf.order_amount.describe()
     Name: order_amount, dtype: float64
 
 
-Given the large standard deviation of $41282.54, it is apparent that the naïvely calculated AOV skewed by outliers. In this case, the outliers come from large orders worth 704000, corresponding from orders of 2000, which are most likely wholesale orders. 
+Given the large standard deviation of $41282.54, it is apparent that the naïvely calculated AOV skewed by outliers. Let's identify the outliers and interpret them.
+
+```python
+# examine the order_amount in descent order
+shopifydf["order_amount"].value_counts().sort_index(ascending=False).head(20)
+```
+
+    704000    17
+    154350     1
+    102900     1
+    77175      9
+    51450     16
+    25725     19
+    1760       1
+    1408       2
+    1086       1
+    1064       1
+    Name: order_amount, dtype: int64
+    
+It is apparent that there is a large difference between the order_amounts, let's filter out the extreme large values and examine a little closer.
+
+```python
+shopifydf[shopifydf["order_amount"] > 2000]["shop_id"].value_counts()
+```
+
+    78    46
+    42    17
+    Name: shop_id, dtype: int64
+    
+So in this case, the outliers come from shop 42 and shop 78, corresponding from orders of 2000, which are most likely wholesale orders. 
 
 Depending on what we are interested in, a better way to evaluate the dataset could be to look at the **mean product cost**: since one shop sells only one shoe, we take the 
 order_amount divided by total_items and then find the mean. 
-
-```python
-# examine the summary statistics of order_amount column
-shopifydf.order_amount.describe()
-```
 
 Alternatively if we are more interested in how much customers spend per order on averge we can look at the **median order value**.
 
