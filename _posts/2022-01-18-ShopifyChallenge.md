@@ -16,7 +16,6 @@ shopifydf = pd.read_csv("shopifyChal.csv")   # CSV renamed for convenience
 shopifydf.head()
 ```
 
-data exploration
 ![1.png](https://github.com/YuchenWg/yuchenwg.github.io/blob/master/images/ShopifyChallenge/1.png)
 
 
@@ -67,7 +66,7 @@ shopifydf["order_amount"].value_counts().sort_index(ascending=False).head(20)
     1064       1
     Name: order_amount, dtype: int64
     
-It is apparent that there is a large difference between the order_amounts, let's filter out the extreme large values and examine a little closer.
+There is a large difference between the order_amounts $25725 and $1760, let's filter out the extremely large values and examine a little closer.
 
 ```python
 shopifydf[shopifydf["order_amount"] > 2000]["shop_id"].value_counts()
@@ -79,9 +78,11 @@ shopifydf[shopifydf["order_amount"] > 2000]["shop_id"].value_counts()
     
 So in this case, the outliers come from shop 42 and shop 78. For shop 42, the outliers come from order_amounts of $704000, corresponding from orders of 2000, which are most likely wholesale orders. Shop 78 seems to be selling expensive sneakers in general, with every sneaker selling for $25725.
 
+These extreme values skew the mean thus making it unreliable. Since the extreme values are not typical of the sneaker orders, I would excluded them from the analysis. The best way to evaluate this dataset really depends on what insights we wish to extract from it. If this is for market research and we want to know how much sneakers cost on average, then I would report the **mean product cost** (since one shop sells only one shoe, we take the order_amount divided by total_items and then find the mean), disregarding shop 78 of course, as it is not representative of typical sneaker prices. If we want to know how much customers spend on averge per order, I would report the **median order value** instead of the mean order value as it is more robust and less prone to be skewed by outliers.
+
 ## b. What metric would you report for this dataset?
 
-This really depends on what insights we wish to extract from the dataset. If this is for market research and we want to know how much shoes cost on average, then I would report the **mean product cost** (since one shop sells only one shoe, we take the order_amount divided by total_items and then find the mean). If we want to know how much customers spend on averge per order, I would report the **median order value** instead of the mean order value as it less prone to be skewed by outliers.
+Since we were originally interested in the average order value (AOV), it seems like we want to know how much customers spend on averge per order, I would report the **median order value** instead of the mean order value as it is a more robust average and less prone to be skewed by outliers.
 
 ## c. What is its value?
 
