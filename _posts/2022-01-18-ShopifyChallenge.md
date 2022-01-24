@@ -2,6 +2,8 @@
 layout: post
 title: Shopify Challenge
 ---
+* TOC
+{:toc}
 
 # Question 1 
 
