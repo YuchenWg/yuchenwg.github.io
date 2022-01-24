@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Shopify Challenge
+title: 2022 Winter Data Science Internship Shopify Challenge
 ---
 * TOC
 {:toc}
